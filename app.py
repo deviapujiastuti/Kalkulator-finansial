@@ -9,32 +9,28 @@ st.set_page_config(
 def rupiah(x):
     return f"Rp {x:,.0f}".replace(",", ".")
 
-# ============ KODE AKSES (biar ngga sembarang orang bisa pakai dari link yang sama) ============
-# Ganti/tambah kode di list ini sesuai jumlah pembeli. Tiap pembeli dikasih 1 kode berbeda.
-KODE_AKSES_VALID = [
-    "DEVIA-7X9K",
-    "DEVIA-4M2P",
-    "DEVIA-8L5Q",
-    "DEVIA-1N6R",
-    "DEVIA-3T8W",
-    "DEVIA-5Y2Z",
-    "DEVIA-9C4B",
-    "DEVIA-2F7H",
-    "DEVIA-6J1D",
-    "DEVIA-0S3G",
-]
+# ============ KODE AKSES (disimpan di Streamlit Secrets, bukan di file ini) ============
+# Cara setting: buat file .streamlit/secrets.toml (lokal) atau isi lewat menu
+# "Settings > Secrets" di Streamlit Community Cloud, dengan format:
+#
+# kode_akses_valid = ["DEVIA-7X9K", "DEVIA-4M2P", "DEVIA-8L5Q"]
+#
+# Kalau belum ada secrets sama sekali, aplikasi tetap bisa dibuka tanpa kode
+# (mode ini otomatis aktif kalau kamu belum setting apapun) — cocok buat testing.
+
+KODE_AKSES_VALID = st.secrets.get("kode_akses_valid", None)
 
 if "akses_diberikan" not in st.session_state:
     st.session_state["akses_diberikan"] = False
 
-if not st.session_state["akses_diberikan"]:
+if KODE_AKSES_VALID and not st.session_state["akses_diberikan"]:
     st.title("💰 Kalkulator Keuangan Sehari-hari")
     st.write("Aplikasi ini khusus untuk pembeli. Masukkan kode akses yang kamu terima setelah pembelian.")
-    kode_input = st.text_input("Kode Akses")
+    kode_input = st.text_input("Kode Akses", placeholder="Masukkan Kode Akses Disini...")
     cek_kode = st.button("Masuk", type="primary")
 
     if cek_kode:
-        if kode_input.strip().upper() in KODE_AKSES_VALID:
+        if kode_input.strip().upper() in [k.upper() for k in KODE_AKSES_VALID]:
             st.session_state["akses_diberikan"] = True
             st.rerun()
         else:

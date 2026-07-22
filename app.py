@@ -9,6 +9,39 @@ st.set_page_config(
 def rupiah(x):
     return f"Rp {x:,.0f}".replace(",", ".")
 
+# ============ KODE AKSES (biar ngga sembarang orang bisa pakai dari link yang sama) ============
+# Ganti/tambah kode di list ini sesuai jumlah pembeli. Tiap pembeli dikasih 1 kode berbeda.
+KODE_AKSES_VALID = [
+    "DEVIA-7X9K",
+    "DEVIA-4M2P",
+    "DEVIA-8L5Q",
+    "DEVIA-1N6R",
+    "DEVIA-3T8W",
+    "DEVIA-5Y2Z",
+    "DEVIA-9C4B",
+    "DEVIA-2F7H",
+    "DEVIA-6J1D",
+    "DEVIA-0S3G",
+]
+
+if "akses_diberikan" not in st.session_state:
+    st.session_state["akses_diberikan"] = False
+
+if not st.session_state["akses_diberikan"]:
+    st.title("💰 Kalkulator Keuangan Sehari-hari")
+    st.write("Aplikasi ini khusus untuk pembeli. Masukkan kode akses yang kamu terima setelah pembelian.")
+    kode_input = st.text_input("Kode Akses", placeholder="Contoh: DEVIA-7X9K")
+    cek_kode = st.button("Masuk", type="primary")
+
+    if cek_kode:
+        if kode_input.strip().upper() in KODE_AKSES_VALID:
+            st.session_state["akses_diberikan"] = True
+            st.rerun()
+        else:
+            st.error("Kode akses salah atau tidak ditemukan. Cek kembali kode yang kamu terima, atau hubungi penjual.")
+
+    st.stop()
+
 st.title("💰 Kalkulator Keuangan Sehari-hari")
 st.caption("Alat bantu hitung keuangan simpel, tanpa istilah ribet — gratis, ngga perlu login/API apapun")
 

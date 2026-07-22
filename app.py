@@ -30,7 +30,7 @@ if "akses_diberikan" not in st.session_state:
 if not st.session_state["akses_diberikan"]:
     st.title("💰 Kalkulator Keuangan Sehari-hari")
     st.write("Aplikasi ini khusus untuk pembeli. Masukkan kode akses yang kamu terima setelah pembelian.")
-    kode_input = st.text_input("Kode Akses", placeholder="Contoh: DEVIA-7X9K")
+    kode_input = st.text_input("Kode Akses")
     cek_kode = st.button("Masuk", type="primary")
 
     if cek_kode:
